@@ -5,22 +5,23 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>UNJNI — 2026</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg"/>
-<link rel="shortcut icon" href="favicon.svg"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#060606;
+  --bg:#04040a;
+  --amber:#FFB830;
+  --amber-dim:rgba(255,184,48,0.18);
+  --amber-faint:rgba(255,184,48,0.06);
   --white:#f0ede6;
-  --dim:rgba(240,237,230,0.35);
-  --faint:rgba(240,237,230,0.1);
-  --line:rgba(240,237,230,0.07);
+  --dim:rgba(240,237,230,0.3);
+  --line:rgba(255,184,48,0.08);
+  --line-w:rgba(240,237,230,0.05);
 }
 
-html{ scroll-behavior: smooth; }
-
+html{scroll-behavior:smooth}
 body{
   background:var(--bg);
   color:var(--white);
@@ -29,139 +30,148 @@ body{
   cursor:none;
 }
 
-/* Grain overlay */
+/* Grain */
 body::before{
   content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.032'/%3E%3C/svg%3E");
-  opacity:.55;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity:.5;
 }
 
-/* Custom cursor */
-.cur{ width:5px;height:5px;background:var(--white);border-radius:50%;position:fixed;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:difference; }
-.cur-r{ width:28px;height:28px;border:1px solid rgba(240,237,230,0.25);border-radius:50%;position:fixed;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all .1s ease; }
+/* Cursor */
+.cur{width:5px;height:5px;background:var(--amber);border-radius:50%;position:fixed;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);box-shadow:0 0 8px var(--amber);}
+.cur-r{width:24px;height:24px;border:1px solid rgba(255,184,48,.3);border-radius:50%;position:fixed;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all .1s ease;}
 
-/* ═══════════════════════════════════════════
-   SECTION 1 — OPENING. Full viewport. Logo.
-═══════════════════════════════════════════ */
+/* ═══════════════════════════════════════
+   SECTION 1 — HERO. Sacred mandala.
+═══════════════════════════════════════ */
 .s1{
-  height:100vh;
+  height:100vh;min-height:700px;
   display:flex;flex-direction:column;
   align-items:center;justify-content:center;
-  position:relative;
+  position:relative;overflow:hidden;
   border-bottom:1px solid var(--line);
-  overflow:hidden;
 }
 
-/* Radial light bleed — luxury depth */
-.s1::after{
-  content:'';position:absolute;
-  width:600px;height:600px;
-  background:radial-gradient(circle, rgba(255,255,255,.028) 0%, transparent 68%);
-  top:50%;left:50%;transform:translate(-50%,-55%);
+/* ── MANDALA CANVAS ── */
+.mandala-wrap{
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:min(90vw,700px);
+  height:min(90vw,700px);
   pointer-events:none;
+  z-index:0;
 }
 
-.s1-inner{
+.mandala-wrap svg{
+  width:100%;height:100%;
+  overflow:visible;
+}
+
+/* Outer rings — slow rotation */
+.ring-outer{ animation: rotCW 90s linear infinite; transform-origin:center; }
+.ring-mid  { animation: rotCCW 60s linear infinite; transform-origin:center; }
+.ring-inner{ animation: rotCW 40s linear infinite; transform-origin:center; }
+.ring-core { animation: rotCCW 25s linear infinite; transform-origin:center; }
+
+/* Mandala petals breathe */
+.petals{ animation: petalBreath 4s ease-in-out infinite; transform-origin:center; }
+
+/* Dot grid rotates */
+.dot-ring{ animation: rotCW 120s linear infinite; transform-origin:center; }
+
+/* ── HERO CONTENT ── */
+.s1-content{
+  position:relative;z-index:5;
   display:flex;flex-direction:column;
   align-items:center;gap:0;
-  position:relative;z-index:2;
-  opacity:0;animation:cinUp 1.4s cubic-bezier(.16,1,.3,1) .2s forwards;
+  opacity:0;animation:riseIn 1.6s cubic-bezier(.16,1,.3,1) .4s forwards;
 }
 
 .s1-year{
-  font-size:.58rem;letter-spacing:.4em;
-  color:var(--dim);margin-bottom:1.8rem;
+  font-size:.55rem;letter-spacing:.42em;
+  color:var(--amber);opacity:.7;
+  margin-bottom:2rem;
 }
 
-/* Ear — large, dominant */
+/* Ear — amber, animated */
 .ear-wrap{
   position:relative;
-  width:180px;height:220px;
-  margin-bottom:2rem;
+  width:140px;height:170px;
   display:flex;align-items:center;justify-content:center;
+  margin-bottom:1.8rem;
 }
-
-/* Breathing ring 1 — outermost */
 .ear-ring{
-  position:absolute;
-  border-radius:50%;
-  border:1px solid rgba(240,237,230,0);
+  position:absolute;border-radius:50%;
+  border:1px solid rgba(255,184,48,0);
   pointer-events:none;
 }
-.ear-ring-1{
-  width:240px;height:240px;
-  animation:listenRing1 2.8s ease-in-out infinite;
+.er1{width:200px;height:200px;animation:listenR1 3s ease-in-out infinite;}
+.er2{width:168px;height:168px;animation:listenR2 3s ease-in-out infinite .5s;}
+.er3{width:136px;height:136px;animation:listenR3 3s ease-in-out infinite 1s;}
+
+.ear-waves{
+  position:absolute;left:-52px;top:50%;
+  transform:translateY(-50%);
+  display:flex;flex-direction:column;gap:9px;
+  z-index:1;
 }
-.ear-ring-2{
-  width:200px;height:200px;
-  animation:listenRing2 2.8s ease-in-out infinite .4s;
+.ewl{
+  height:2px;border-radius:2px;
+  background:linear-gradient(to right,transparent,var(--amber),transparent);
+  box-shadow:0 0 5px rgba(255,184,48,.5);
+  animation:waveSweep 2.4s ease-in-out infinite;
+  transform-origin:left center;
 }
-.ear-ring-3{
-  width:160px;height:160px;
-  animation:listenRing3 2.8s ease-in-out infinite .8s;
-}
+.ewl:nth-child(1){width:36px;animation-delay:0s;}
+.ewl:nth-child(2){width:26px;animation-delay:.2s;}
+.ewl:nth-child(3){width:16px;animation-delay:.4s;}
 
 .ear-svg{
-  width:130px;height:160px;
+  width:110px;height:135px;
   position:relative;z-index:2;
   animation:earBreath 3s ease-in-out infinite;
 }
 
-/* Incoming wave arcs — animate left-to-right like sound arriving */
-.ear-waves{
-  position:absolute;
-  left:-60px;top:50%;
-  transform:translateY(-50%);
-  display:flex;flex-direction:column;gap:10px;
-  z-index:1;
-}
-.ear-wave-line{
-  height:2px;border-radius:2px;
-  background:linear-gradient(to right, transparent, rgba(255,184,48,0.7), transparent);
-  box-shadow:0 0 6px rgba(255,184,48,.4);
-  animation:waveSweep 2.2s ease-in-out infinite;
-  transform-origin:left center;
-}
-.ewl1{width:38px;animation-delay:0s;}
-.ewl2{width:28px;animation-delay:.18s;}
-.ewl3{width:18px;animation-delay:.36s;}
-
+/* UNJNI — smaller, elegant */
 .s1-logo{
   font-family:'Bebas Neue',sans-serif;
-  font-size:clamp(2.8rem,8vw,6rem);
-  line-height:.9;letter-spacing:.12em;
+  font-size:clamp(2.5rem,7vw,5.5rem);
+  line-height:1;letter-spacing:.18em;
   color:var(--white);
 }
 
-.s1-sub{
-  font-size:.62rem;letter-spacing:.28em;
-  color:var(--dim);
-  margin-top:1.4rem;
+.s1-tag{
+  font-size:.58rem;letter-spacing:.28em;
+  color:var(--dim);margin-top:.9rem;
   text-transform:uppercase;
 }
 
 /* Scroll cue */
 .scroll-cue{
-  position:absolute;bottom:2.5rem;
+  position:absolute;bottom:2.5rem;z-index:5;
   display:flex;flex-direction:column;align-items:center;gap:.5rem;
-  opacity:0;animation:cinUp 1s ease 1.4s forwards;
-  z-index:2;
+  opacity:0;animation:riseIn 1s ease 1.8s forwards;
 }
-.scroll-cue span{font-size:.5rem;letter-spacing:.25em;color:var(--dim);}
-.scroll-line{
-  width:1px;height:36px;
-  background:linear-gradient(to bottom,var(--dim),transparent);
-  animation:scrollPulse 2s ease infinite;
-}
+.scroll-cue span{font-size:.48rem;letter-spacing:.28em;color:var(--amber);opacity:.6;}
+.scroll-line{width:1px;height:32px;background:linear-gradient(to bottom,var(--amber),transparent);animation:scrollP 2s ease infinite;}
 
-/* Top World'ss */
-.World's{position:fixed;font-size:.52rem;letter-spacing:.18em;color:var(--faint);z-index:50;}
-.c-tl{top:1.6rem;left:2rem;}
-.c-tr{top:1.6rem;right:2rem;text-align:right;}
+/* ── CORNER HUD elements ── */
+.hud{position:fixed;font-size:.48rem;letter-spacing:.18em;color:rgba(255,184,48,.3);z-index:50;}
+.hud-tl{top:1.5rem;left:2rem;}
+.hud-tr{top:1.5rem;right:2rem;text-align:right;}
+.hud-bl{bottom:1.5rem;left:2rem;}
+.hud-br{bottom:1.5rem;right:2rem;text-align:right;}
 
-/* ═══════════════════════════════════════════
-   SECTION 2 — THE TERMINAL. Hero piece.
-═══════════════════════════════════════════ */
+/* HUD horizontal lines */
+.hud-line-t{position:fixed;top:0;left:0;right:0;height:1px;background:linear-gradient(to right,transparent,rgba(255,184,48,.12),transparent);z-index:49;}
+.hud-line-b{position:fixed;bottom:0;left:0;right:0;height:1px;background:linear-gradient(to right,transparent,rgba(255,184,48,.12),transparent);z-index:49;}
+.hud-line-l{position:fixed;top:0;bottom:0;left:0;width:1px;background:linear-gradient(to bottom,transparent,rgba(255,184,48,.12),transparent);z-index:49;}
+.hud-line-r{position:fixed;top:0;bottom:0;right:0;width:1px;background:linear-gradient(to bottom,transparent,rgba(255,184,48,.12),transparent);z-index:49;}
+
+/* ═══════════════════════════════════════
+   SECTION 2 — TERMINAL
+═══════════════════════════════════════ */
 .s2{
   min-height:100vh;
   display:flex;flex-direction:column;
@@ -169,115 +179,105 @@ body::before{
   padding:8rem 2rem;
   position:relative;
   border-bottom:1px solid var(--line);
+  overflow:hidden;
+}
+
+/* Background geometry for s2 */
+.s2-geo{
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:800px;height:800px;
+  pointer-events:none;z-index:0;
+  opacity:.35;
 }
 
 .s2-label{
-  font-size:.55rem;letter-spacing:.3em;color:var(--dim);
-  margin-bottom:3rem;
-  opacity:0;
-  transition:opacity .8s ease,transform .8s ease;
-  transform:translateY(20px);
+  font-size:.52rem;letter-spacing:.32em;
+  color:var(--amber);opacity:.7;
+  margin-bottom:2.5rem;
+  opacity:0;transition:opacity .8s ease,transform .8s ease;
+  transform:translateY(16px);
 }
-.s2-label.vis{opacity:1;transform:translateY(0)}
+.s2-label.vis{opacity:.7;transform:translateY(0)}
 
-/* THE TERMINAL CARD */
+/* Terminal */
 .terminal{
-  width:100%;max-width:680px;
-  border:1px solid rgba(240,237,230,.1);
-  background:rgba(255,255,255,.018);
-  backdrop-filter:blur(8px);
+  width:100%;max-width:660px;
+  border:1px solid rgba(255,184,48,.15);
+  background:rgba(255,184,48,.02);
   position:relative;
-  opacity:0;
-  transition:opacity 1s ease,transform 1s ease;
-  transform:translateY(30px);
+  opacity:0;transition:opacity 1s ease .15s,transform 1s ease .15s;
+  transform:translateY(28px);
 }
 .terminal.vis{opacity:1;transform:translateY(0)}
 
-/* Glow behind terminal */
-.terminal::before{
+/* Amber corner accents on terminal */
+.terminal::before,.terminal::after{
   content:'';position:absolute;
-  inset:-60px;
-  background:radial-gradient(ellipse, rgba(255,255,255,.04) 0%, transparent 65%);
-  pointer-events:none;z-index:-1;border-radius:50%;
+  width:12px;height:12px;
+  border-color:var(--amber);
+  border-style:solid;
+  opacity:.5;
+}
+.terminal::before{top:-1px;left:-1px;border-width:1px 0 0 1px;}
+.terminal::after{bottom:-1px;right:-1px;border-width:0 1px 1px 0;}
+
+/* Glow behind terminal */
+.t-glow{
+  position:absolute;
+  inset:-80px;
+  background:radial-gradient(ellipse,rgba(255,184,48,.04) 0%,transparent 65%);
+  pointer-events:none;z-index:-1;
 }
 
-/* Terminal top bar */
 .t-top{
   display:flex;align-items:center;gap:.45rem;
-  padding:.75rem 1.2rem;
-  border-bottom:1px solid rgba(240,237,230,.07);
-  background:rgba(255,255,255,.025);
+  padding:.65rem 1.1rem;
+  border-bottom:1px solid rgba(255,184,48,.1);
+  background:rgba(255,184,48,.03);
 }
-.tdot{ width:6px;height:6px;border-radius:50%;background:rgba(240,237,230,.12); }
-.t-top-label{
-  margin-left:.3rem;
-  font-size:.52rem;letter-spacing:.2em;color:rgba(240,237,230,.22);
-}
-.t-top-r{
-  margin-left:auto;display:flex;align-items:center;gap:.4rem;
-  font-size:.5rem;letter-spacing:.18em;color:rgba(240,237,230,.22);
-}
-.pdot{ width:4px;height:4px;border-radius:50%;background:var(--white);animation:pdot 2.2s infinite; }
+.tdot{width:5px;height:5px;border-radius:50%;background:rgba(255,184,48,.2);}
+.t-top-lbl{margin-left:.3rem;font-size:.5rem;letter-spacing:.2em;color:rgba(255,184,48,.35);}
+.t-top-r{margin-left:auto;display:flex;align-items:center;gap:.35rem;font-size:.48rem;letter-spacing:.18em;color:rgba(255,184,48,.35);}
+.pdot{width:4px;height:4px;border-radius:50%;background:var(--amber);animation:pdot 2s infinite;box-shadow:0 0 5px var(--amber);}
 
-/* Conversation body */
 .t-body{
   padding:2rem 1.8rem 1.2rem;
-  min-height:160px;
+  min-height:150px;
   display:flex;flex-direction:column;
   justify-content:flex-end;
-  gap:.8rem;
-  position:relative;
+  gap:.9rem;
 }
 
-.msg{ display:flex;flex-direction:column;gap:.5rem; }
-
-.msg-u{
-  font-size:clamp(.82rem,2vw,1rem);
-  letter-spacing:.02em;font-weight:400;
-  color:var(--white);line-height:1.4;
-}
-
-.msg-a{
-  font-size:clamp(.75rem,1.8vw,.9rem);
-  letter-spacing:.02em;font-weight:300;
-  color:var(--dim);font-style:italic;
-  line-height:1.5;
-  opacity:0;transition:opacity .6s ease;
-}
+.msg{display:flex;flex-direction:column;gap:.5rem;}
+.msg-u{font-size:clamp(.82rem,2vw,.98rem);letter-spacing:.02em;color:var(--white);line-height:1.45;}
+.msg-a{font-size:clamp(.74rem,1.8vw,.88rem);letter-spacing:.02em;font-weight:300;color:rgba(255,184,48,.65);font-style:italic;line-height:1.55;opacity:0;transition:opacity .6s ease;}
 .msg-a.vis{opacity:1}
 
-/* Typing dots */
-.tdots{
-  display:flex;gap:3.5px;align-items:center;
-  height:14px;
-  opacity:0;transition:opacity .3s;
-}
+.tdots{display:flex;gap:3px;align-items:center;height:14px;opacity:0;transition:opacity .3s;}
 .tdots.on{opacity:1}
-.tdots span{
-  width:3px;height:3px;border-radius:50%;
-  background:rgba(240,237,230,.3);
-  animation:tdot 1.2s infinite;
-}
+.tdots span{width:3px;height:3px;border-radius:50%;background:rgba(255,184,48,.4);animation:tdot 1.2s infinite;}
 .tdots span:nth-child(2){animation-delay:.2s}
 .tdots span:nth-child(3){animation-delay:.4s}
 
-/* Input bar */
 .t-foot{
   display:flex;align-items:center;gap:.8rem;
-  padding:.9rem 1.4rem;
-  border-top:1px solid rgba(240,237,230,.06);
+  padding:.85rem 1.3rem;
+  border-top:1px solid rgba(255,184,48,.08);
 }
 .micbtn{
-  width:28px;height:28px;border-radius:50%;
-  background:var(--white);
+  width:26px;height:26px;border-radius:50%;
+  background:var(--amber);
   display:flex;align-items:center;justify-content:center;
   flex-shrink:0;
   animation:micglow 2.8s ease infinite;
+  box-shadow:0 0 12px rgba(255,184,48,.3);
 }
-.micbtn svg{width:12px;height:12px;}
+.micbtn svg{width:11px;height:11px;}
 .wbars{display:flex;align-items:center;gap:2px;height:16px;opacity:0;transition:opacity .25s;}
 .wbars.on{opacity:1}
-.wbars span{display:block;width:2px;background:var(--white);border-radius:2px;animation:wb .75s ease infinite;}
+.wbars span{display:block;width:2px;background:var(--amber);border-radius:2px;animation:wb .75s ease infinite;box-shadow:0 0 3px rgba(255,184,48,.5);}
 .wbars span:nth-child(1){height:6px;animation-delay:0s}
 .wbars span:nth-child(2){height:13px;animation-delay:.08s}
 .wbars span:nth-child(3){height:9px;animation-delay:.16s}
@@ -285,151 +285,121 @@ body::before{
 .wbars span:nth-child(5){height:8px;animation-delay:.12s}
 .wbars span:nth-child(6){height:12px;animation-delay:.2s}
 .wbars span:nth-child(7){height:5px;animation-delay:.06s}
-.t-hint{font-size:.62rem;letter-spacing:.1em;color:rgba(240,237,230,.18);flex:1;}
+.t-hint{font-size:.6rem;letter-spacing:.1em;color:rgba(255,184,48,.28);flex:1;}
 
-/* ═══════════════════════════════════════════
+/* ═══════════════════════════════════════
    SECTION 3 — COUNTDOWN
-═══════════════════════════════════════════ */
+═══════════════════════════════════════ */
 .s3{
   min-height:70vh;
   display:flex;flex-direction:column;
   align-items:center;justify-content:center;
-  padding:7rem 2rem;
+  padding:6rem 2rem;
   border-bottom:1px solid var(--line);
-  gap:1rem;
+  position:relative;overflow:hidden;
 }
 
-.s3-label{
-  font-size:.55rem;letter-spacing:.3em;color:var(--dim);
-  margin-bottom:2.5rem;
-  opacity:0;transition:opacity .8s ease,transform .8s ease;transform:translateY(16px);
+.s3-geo{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  pointer-events:none;z-index:0;opacity:.2;
 }
-.s3-label.vis{opacity:1;transform:translateY(0)}
+
+.s3-lbl{
+  font-size:.52rem;letter-spacing:.32em;color:var(--amber);
+  margin-bottom:3rem;opacity:0;
+  transition:opacity .8s ease,transform .8s ease;transform:translateY(16px);
+}
+.s3-lbl.vis{opacity:.7;transform:translateY(0)}
 
 .cd{
   display:flex;align-items:flex-start;gap:0;
-  opacity:0;transition:opacity 1s ease .2s,transform 1s ease .2s;transform:translateY(24px);
+  opacity:0;transition:opacity 1s ease .2s,transform 1s ease .2s;
+  transform:translateY(20px);
 }
 .cd.vis{opacity:1;transform:translateY(0)}
 
-.cd-u{ text-align:center;padding:0 2.5rem;border-right:1px solid var(--line); }
-.cd-u:last-child{ border-right:none; }
+.cd-u{text-align:center;padding:0 2.8rem;border-right:1px solid rgba(255,184,48,.1);}
+.cd-u:last-child{border-right:none;}
 .cd-n{
   font-family:'Bebas Neue',sans-serif;
-  font-size:clamp(4rem,12vw,9rem);
+  font-size:clamp(4rem,11vw,8rem);
   line-height:1;letter-spacing:.04em;
   display:block;color:var(--white);
   transition:opacity .08s;
+  text-shadow:0 0 40px rgba(255,184,48,.15);
 }
 .cd-n.fl{opacity:.15}
-.cd-l{
-  font-size:.5rem;letter-spacing:.22em;
-  color:var(--dim);text-transform:uppercase;
-  display:block;margin-top:.3rem;
-}
+.cd-l{font-size:.48rem;letter-spacing:.22em;color:rgba(255,184,48,.45);text-transform:uppercase;display:block;margin-top:.3rem;}
 
-/* ═══════════════════════════════════════════
-   SECTION 4 — CLOSING. Made in India.
-═══════════════════════════════════════════ */
+/* ═══════════════════════════════════════
+   SECTION 4 — CLOSING
+═══════════════════════════════════════ */
 .s4{
   min-height:60vh;
   display:flex;flex-direction:column;
   align-items:center;justify-content:center;
   padding:6rem 2rem;
-  gap:1.5rem;
   position:relative;overflow:hidden;
 }
 
-/* Large ghost text behind */
-.s4-ghost{
-  position:absolute;
-  font-family:'Bebas Neue',sans-serif;
-  font-size:clamp(80px,22vw,240px);
-  color:rgba(240,237,230,.018);
-  letter-spacing:-.01em;
-  user-select:none;pointer-events:none;
-  white-space:nowrap;
-  top:50%;left:50%;transform:translate(-50%,-50%);
+.s4-mandala{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  pointer-events:none;z-index:0;
+  width:min(80vw,500px);height:min(80vw,500px);
+  opacity:.08;
+  animation:rotCW 120s linear infinite;
 }
 
 .s4-inner{
-  display:flex;flex-direction:column;align-items:center;gap:1.2rem;
   position:relative;z-index:2;
-  opacity:0;transition:opacity 1.2s ease,transform 1.2s ease;transform:translateY(24px);
+  display:flex;flex-direction:column;align-items:center;gap:1.2rem;
+  opacity:0;transition:opacity 1.2s ease,transform 1.2s ease;
+  transform:translateY(20px);
 }
 .s4-inner.vis{opacity:1;transform:translateY(0)}
 
-.s4-rule{ width:40px;height:1px;background:rgba(240,237,230,.2); }
-
-.s4-made{
-  font-size:.58rem;letter-spacing:.32em;
-  color:var(--dim);text-transform:uppercase;
-}
-
-.s4-first{
+.s4-rule{width:32px;height:1px;background:rgba(255,184,48,.35);}
+.s4-made{font-size:.55rem;letter-spacing:.32em;color:rgba(255,184,48,.55);}
+.s4-headline{
   font-family:'Bebas Neue',sans-serif;
-  font-size:clamp(1.4rem,4vw,2.6rem);
-  letter-spacing:.12em;
-  color:var(--white);
+  font-size:clamp(1.6rem,4.5vw,3rem);
+  letter-spacing:.14em;color:var(--white);
   text-align:center;line-height:1.2;
+  text-shadow:0 0 60px rgba(255,184,48,.1);
 }
+.s4-sub{font-size:.5rem;letter-spacing:.28em;color:rgba(255,184,48,.4);margin-top:.4rem;}
 
-.s4-year{
-  font-size:.55rem;letter-spacing:.28em;color:var(--dim);margin-top:.5rem;
-}
+/* Footer */
+.footer{padding:1.4rem 2.5rem;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;}
+.ft{font-size:.48rem;letter-spacing:.16em;color:rgba(255,184,48,.2);}
 
-/* Footer strip */
-.footer{
-  padding:1.4rem 2.5rem;
-  border-top:1px solid var(--line);
-  display:flex;justify-content:space-between;align-items:center;
-}
-.ft{font-size:.5rem;letter-spacing:.16em;color:var(--faint);}
-
-/* ═══════════════════════════════════════════
+/* ═══════════════════════════════════════
    KEYFRAMES
-═══════════════════════════════════════════ */
-@keyframes cinUp{
-  from{opacity:0;transform:translateY(30px)}
-  to{opacity:1;transform:translateY(0)}
-}
-@keyframes listenRing1{
-  0%,100%{border-color:rgba(255,184,48,0);transform:scale(.92);box-shadow:0 0 0px rgba(255,184,48,0)}
-  50%{border-color:rgba(255,184,48,.25);transform:scale(1);box-shadow:0 0 18px rgba(255,184,48,.08)}
-}
-@keyframes listenRing2{
-  0%,100%{border-color:rgba(255,184,48,0);transform:scale(.9);box-shadow:0 0 0px rgba(255,184,48,0)}
-  50%{border-color:rgba(255,184,48,.35);transform:scale(1);box-shadow:0 0 22px rgba(255,184,48,.12)}
-}
-@keyframes listenRing3{
-  0%,100%{border-color:rgba(255,184,48,0);transform:scale(.88);box-shadow:0 0 0px rgba(255,184,48,0)}
-  50%{border-color:rgba(255,184,48,.5);transform:scale(1);box-shadow:0 0 28px rgba(255,184,48,.18)}
-}
-@keyframes earBreath{
-  0%,100%{opacity:.7;filter:drop-shadow(0 0 0px rgba(255,184,48,0))}
-  50%{opacity:1;filter:drop-shadow(0 0 10px rgba(255,184,48,.55))}
-}
-@keyframes waveSweep{
-  0%{opacity:0;transform:scaleX(0.2)}
-  40%{opacity:1;transform:scaleX(1)}
-  80%{opacity:0;transform:scaleX(1)}
-  100%{opacity:0;transform:scaleX(0.2)}
-}
-@keyframes pdot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.25;transform:scale(.55)}}
-@keyframes tdot{0%,60%,100%{transform:translateY(0);opacity:.28}30%{transform:translateY(-4px);opacity:1}}
+═══════════════════════════════════════ */
+@keyframes riseIn{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes rotCW{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes rotCCW{from{transform:rotate(0deg)}to{transform:rotate(-360deg)}}
+@keyframes petalBreath{0%,100%{opacity:.5;transform:scale(.97)}50%{opacity:.85;transform:scale(1)}}
+@keyframes listenR1{0%,100%{border-color:rgba(255,184,48,0);box-shadow:0 0 0 rgba(255,184,48,0)}50%{border-color:rgba(255,184,48,.2);box-shadow:0 0 20px rgba(255,184,48,.06)}}
+@keyframes listenR2{0%,100%{border-color:rgba(255,184,48,0);box-shadow:0 0 0 rgba(255,184,48,0)}50%{border-color:rgba(255,184,48,.3);box-shadow:0 0 25px rgba(255,184,48,.1)}}
+@keyframes listenR3{0%,100%{border-color:rgba(255,184,48,0);box-shadow:0 0 0 rgba(255,184,48,0)}50%{border-color:rgba(255,184,48,.5);box-shadow:0 0 30px rgba(255,184,48,.18)}}
+@keyframes earBreath{0%,100%{filter:drop-shadow(0 0 4px rgba(255,184,48,.3))}50%{filter:drop-shadow(0 0 14px rgba(255,184,48,.7))}}
+@keyframes waveSweep{0%{opacity:0;transform:scaleX(.15)}45%{opacity:1;transform:scaleX(1)}80%{opacity:0;transform:scaleX(1)}100%{opacity:0}}
+@keyframes pdot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.2;transform:scale(.5)}}
+@keyframes tdot{0%,60%,100%{transform:translateY(0);opacity:.3}30%{transform:translateY(-4px);opacity:1}}
 @keyframes wb{0%,100%{transform:scaleY(.3)}50%{transform:scaleY(1)}}
-@keyframes micglow{0%,100%{box-shadow:0 0 0 0 rgba(240,237,230,.2)}65%{box-shadow:0 0 0 7px rgba(240,237,230,0)}}
-@keyframes scrollPulse{0%,100%{opacity:.4;transform:scaleY(.8)}50%{opacity:1;transform:scaleY(1)}}
+@keyframes micglow{0%,100%{box-shadow:0 0 12px rgba(255,184,48,.3)}60%{box-shadow:0 0 22px rgba(255,184,48,.6),0 0 40px rgba(255,184,48,.15)}}
+@keyframes scrollP{0%,100%{opacity:.3;transform:scaleY(.7)}50%{opacity:1;transform:scaleY(1)}}
 
-/* Mobile */
-@media(max-width:600px){
+@media(max-width:640px){
   body{cursor:auto}
   .cur,.cur-r{display:none}
-  .World's{display:none}
-  .cd-u{padding:0 1.2rem}
-  .t-body{padding:1.4rem 1.2rem 1rem}
-  .t-foot{padding:.75rem 1rem}
-  .s1-logo{font-size:clamp(5rem,22vw,8rem)}
+  .hud-bl,.hud-br{display:none}
+  .cd-u{padding:0 1.4rem}
+  .t-body{padding:1.4rem 1.1rem 1rem}
+  .mandala-wrap{width:95vw;height:95vw}
 }
 </style>
 </head>
@@ -438,43 +408,203 @@ body::before{
 <div class="cur" id="cur"></div>
 <div class="cur-r" id="curr"></div>
 
-<div class="World's c-tl">UNJNI · 01</div>
-<div class="World's c-tr" id="wlabel">— WAITING</div>
+<!-- HUD frame -->
+<div class="hud-line-t"></div>
+<div class="hud-line-b"></div>
+<div class="hud-line-l"></div>
+<div class="hud-line-r"></div>
+<div class="hud hud-tl">UNJNI · SYS.01</div>
+<div class="hud hud-tr" id="wlabel">INITIALISING</div>
+<div class="hud hud-bl">23.5937°N · 58.3663°E</div>
+<div class="hud hud-br">VOICE OS · INDIA</div>
 
-<!-- ═══ S1 — OPENING ═══ -->
+<!-- ═══ S1 HERO ═══ -->
 <section class="s1">
-  <div class="s1-inner">
 
+  <!-- Sacred Mandala -->
+  <div class="mandala-wrap">
+    <svg viewBox="0 0 700 700" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Outermost dashed orbit -->
+      <g class="ring-outer">
+        <circle cx="350" cy="350" r="330" stroke="rgba(255,184,48,0.06)" stroke-width="1" stroke-dasharray="4 12"/>
+        <circle cx="350" cy="350" r="318" stroke="rgba(255,184,48,0.04)" stroke-width="0.5"/>
+        <!-- 24 tick marks on outer ring -->
+        <g stroke="rgba(255,184,48,0.15)" stroke-width="1" stroke-linecap="round">
+          <line x1="350" y1="20" x2="350" y2="34"/>
+          <line x1="350" y1="666" x2="350" y2="680"/>
+          <line x1="20" y1="350" x2="34" y2="350"/>
+          <line x1="666" y1="350" x2="680" y2="350"/>
+          <line x1="183" y1="57" x2="190" y2="69"/>
+          <line x1="510" y1="631" x2="517" y2="643"/>
+          <line x1="57" y1="183" x2="69" y2="190"/>
+          <line x1="631" y1="510" x2="643" y2="517"/>
+          <line x1="57" y1="517" x2="69" y2="510"/>
+          <line x1="631" y1="190" x2="643" y2="183"/>
+          <line x1="183" y1="643" x2="190" y2="631"/>
+          <line x1="510" y1="69" x2="517" y2="57"/>
+        </g>
+        <!-- 12 small diamonds on outer ring -->
+        <g fill="rgba(255,184,48,0.2)">
+          <rect x="346.5" y="16" width="7" height="7" transform="rotate(45 350 19.5)"/>
+          <rect x="346.5" y="677.5" width="7" height="7" transform="rotate(45 350 681)"/>
+          <rect x="16" y="346.5" width="7" height="7" transform="rotate(45 19.5 350)"/>
+          <rect x="677.5" y="346.5" width="7" height="7" transform="rotate(45 681 350)"/>
+          <rect x="179.5" y="52.5" width="5" height="5" transform="rotate(45 182 55)"/>
+          <rect x="514.5" y="642.5" width="5" height="5" transform="rotate(45 517 645)"/>
+          <rect x="52.5" y="179.5" width="5" height="5" transform="rotate(45 55 182)"/>
+          <rect x="642.5" y="514.5" width="5" height="5" transform="rotate(45 645 517)"/>
+          <rect x="52.5" y="514.5" width="5" height="5" transform="rotate(45 55 517)"/>
+          <rect x="642.5" y="179.5" width="5" height="5" transform="rotate(45 645 182)"/>
+          <rect x="179.5" y="642.5" width="5" height="5" transform="rotate(45 182 645)"/>
+          <rect x="514.5" y="52.5" width="5" height="5" transform="rotate(45 517 55)"/>
+        </g>
+      </g>
+
+      <!-- Mid geometric ring -->
+      <g class="ring-mid">
+        <circle cx="350" cy="350" r="260" stroke="rgba(255,184,48,0.07)" stroke-width="0.5"/>
+        <circle cx="350" cy="350" r="252" stroke="rgba(255,184,48,0.04)" stroke-width="0.5" stroke-dasharray="2 8"/>
+        <!-- 8-fold star polygon -->
+        <polygon points="
+          350,90 364,336 610,350 364,364
+          350,610 336,364 90,350 336,336"
+          stroke="rgba(255,184,48,0.08)" stroke-width="0.5" fill="none"/>
+        <!-- 16-fold lines -->
+        <g stroke="rgba(255,184,48,0.05)" stroke-width="0.5">
+          <line x1="350" y1="90" x2="350" y2="610"/>
+          <line x1="90" y1="350" x2="610" y2="350"/>
+          <line x1="168" y1="168" x2="532" y2="532"/>
+          <line x1="532" y1="168" x2="168" y2="532"/>
+          <line x1="120" y1="260" x2="580" y2="440"/>
+          <line x1="260" y1="120" x2="440" y2="580"/>
+          <line x1="120" y1="440" x2="580" y2="260"/>
+          <line x1="440" y1="120" x2="260" y2="580"/>
+        </g>
+        <!-- Dot nodes at intersections -->
+        <g fill="rgba(255,184,48,0.25)">
+          <circle cx="350" cy="90" r="2.5"/>
+          <circle cx="350" cy="610" r="2.5"/>
+          <circle cx="90" cy="350" r="2.5"/>
+          <circle cx="610" cy="350" r="2.5"/>
+          <circle cx="168" cy="168" r="2"/>
+          <circle cx="532" cy="532" r="2"/>
+          <circle cx="532" cy="168" r="2"/>
+          <circle cx="168" cy="532" r="2"/>
+        </g>
+      </g>
+
+      <!-- Petal mandala — 8 petals -->
+      <g class="petals">
+        <g stroke="rgba(255,184,48,0.12)" stroke-width="0.8" fill="rgba(255,184,48,0.02)">
+          <ellipse cx="350" cy="230" rx="28" ry="68" />
+          <ellipse cx="350" cy="470" rx="28" ry="68" />
+          <ellipse cx="230" cy="350" rx="68" ry="28" />
+          <ellipse cx="470" cy="350" rx="68" ry="28" />
+          <!-- Diagonal petals -->
+          <ellipse cx="255" cy="255" rx="28" ry="68" transform="rotate(-45 255 255)"/>
+          <ellipse cx="445" cy="445" rx="28" ry="68" transform="rotate(-45 445 445)"/>
+          <ellipse cx="445" cy="255" rx="28" ry="68" transform="rotate(45 445 255)"/>
+          <ellipse cx="255" cy="445" rx="28" ry="68" transform="rotate(45 255 445)"/>
+        </g>
+      </g>
+
+      <!-- Inner ring — fine geometry -->
+      <g class="ring-inner">
+        <circle cx="350" cy="350" r="175" stroke="rgba(255,184,48,0.1)" stroke-width="0.8"/>
+        <circle cx="350" cy="350" r="165" stroke="rgba(255,184,48,0.06)" stroke-width="0.5" stroke-dasharray="3 6"/>
+        <!-- 12 small tick marks -->
+        <g stroke="rgba(255,184,48,0.2)" stroke-width="1" stroke-linecap="round">
+          <line x1="350" y1="175" x2="350" y2="185"/>
+          <line x1="350" y1="515" x2="350" y2="525"/>
+          <line x1="175" y1="350" x2="185" y2="350"/>
+          <line x1="515" y1="350" x2="525" y2="350"/>
+          <line x1="219" y1="219" x2="226" y2="226"/>
+          <line x1="474" y1="474" x2="481" y2="481"/>
+          <line x1="481" y1="219" x2="474" y2="226"/>
+          <line x1="226" y1="474" x2="219" y2="481"/>
+        </g>
+        <!-- Hexagram -->
+        <polygon points="350,192 393,265 350,338 307,265"
+          stroke="rgba(255,184,48,0.07)" stroke-width="0.5" fill="none"/>
+        <polygon points="350,508 393,435 350,362 307,435"
+          stroke="rgba(255,184,48,0.07)" stroke-width="0.5" fill="none"/>
+      </g>
+
+      <!-- Core ring -->
+      <g class="ring-core">
+        <circle cx="350" cy="350" r="88" stroke="rgba(255,184,48,0.14)" stroke-width="1"/>
+        <circle cx="350" cy="350" r="78" stroke="rgba(255,184,48,0.08)" stroke-width="0.5" stroke-dasharray="2 5"/>
+        <!-- 8 spokes -->
+        <g stroke="rgba(255,184,48,0.1)" stroke-width="0.5">
+          <line x1="350" y1="262" x2="350" y2="438"/>
+          <line x1="262" y1="350" x2="438" y2="350"/>
+          <line x1="288" y1="288" x2="412" y2="412"/>
+          <line x1="412" y1="288" x2="288" y2="412"/>
+        </g>
+        <!-- Inner dots -->
+        <g fill="rgba(255,184,48,0.3)">
+          <circle cx="350" cy="262" r="2"/>
+          <circle cx="350" cy="438" r="2"/>
+          <circle cx="262" cy="350" r="2"/>
+          <circle cx="438" cy="350" r="2"/>
+        </g>
+        <!-- Innermost circle -->
+        <circle cx="350" cy="350" r="44" stroke="rgba(255,184,48,0.18)" stroke-width="1"/>
+        <circle cx="350" cy="350" r="28" stroke="rgba(255,184,48,0.12)" stroke-width="0.8"/>
+      </g>
+
+      <!-- Dot ring — orbiting particles -->
+      <g class="dot-ring">
+        <g fill="rgba(255,184,48,0.22)">
+          <circle cx="350" cy="60" r="2.5"/>
+          <circle cx="461" cy="89" r="2"/>
+          <circle cx="544" cy="167" r="2.5"/>
+          <circle cx="573" cy="278" r="2"/>
+          <circle cx="540" cy="390" r="2.5"/>
+          <circle cx="460" cy="478" r="2"/>
+          <circle cx="350" cy="508" r="2.5"/>
+          <circle cx="240" cy="478" r="2"/>
+          <circle cx="160" cy="390" r="2.5"/>
+          <circle cx="127" cy="278" r="2"/>
+          <circle cx="156" cy="167" r="2.5"/>
+          <circle cx="239" cy="89" r="2"/>
+        </g>
+      </g>
+
+      <!-- Bindi — the absolute centre -->
+      <circle cx="350" cy="350" r="6" fill="rgba(255,184,48,0.9)"/>
+      <circle cx="350" cy="350" r="12" fill="none" stroke="rgba(255,184,48,0.4)" stroke-width="1"/>
+      <circle cx="350" cy="350" r="20" fill="none" stroke="rgba(255,184,48,0.15)" stroke-width="0.8"/>
+    </svg>
+  </div>
+
+  <!-- Content over mandala -->
+  <div class="s1-content">
     <div class="s1-year">2026 · THE APP ERA IS OVER</div>
 
+    <!-- Animated ear -->
     <div class="ear-wrap">
-      <!-- Breathing rings — listening pulse -->
-      <div class="ear-ring ear-ring-1"></div>
-      <div class="ear-ring ear-ring-2"></div>
-      <div class="ear-ring ear-ring-3"></div>
-
-      <!-- Incoming sound waves -->
+      <div class="ear-ring er1"></div>
+      <div class="ear-ring er2"></div>
+      <div class="ear-ring er3"></div>
       <div class="ear-waves">
-        <div class="ear-wave-line ewl1"></div>
-        <div class="ear-wave-line ewl2"></div>
-        <div class="ear-wave-line ewl3"></div>
+        <div class="ewl"></div>
+        <div class="ewl"></div>
+        <div class="ewl"></div>
       </div>
-
-      <!-- Ear mark -->
       <svg class="ear-svg" viewBox="0 0 200 240" fill="none">
-        <path d="M72 28C92 20 128 20 148 42C168 64 174 96 171 124C167 152 154 172 140 186C128 198 112 206 102 210C93 214 83 213 76 205C68 196 68 182 74 168C80 154 88 146 90 134C93 120 88 104 80 96C71 87 60 86 54 72C48 58 52 38 72 33Z" stroke="#FFB830" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" opacity=".95"/>
-        <path d="M82 36C100 30 130 34 146 56C160 76 163 104 159 128C154 150 142 165 130 175C120 183 108 188 100 189" stroke="#FFB830" stroke-width="2.8" stroke-linecap="round" opacity=".48"/>
-        <ellipse cx="104" cy="118" rx="18" ry="14" stroke="#FFB830" stroke-width="1.6" opacity=".28"/>
+        <path d="M72 28C92 20 128 20 148 42C168 64 174 96 171 124C167 152 154 172 140 186C128 198 112 206 102 210C93 214 83 213 76 205C68 196 68 182 74 168C80 154 88 146 90 134C93 120 88 104 80 96C71 87 60 86 54 72C48 58 52 38 72 33Z" stroke="#FFB830" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" opacity=".95"/>
+        <path d="M82 36C100 30 130 34 146 56C160 76 163 104 159 128C154 150 142 165 130 175C120 183 108 188 100 189" stroke="#FFB830" stroke-width="2.5" stroke-linecap="round" opacity=".5"/>
+        <ellipse cx="104" cy="118" rx="18" ry="14" stroke="#FFB830" stroke-width="1.5" opacity=".28"/>
         <ellipse cx="104" cy="118" rx="11" ry="8.5" stroke="#FFB830" stroke-width="1.4" opacity=".42"/>
-        <ellipse cx="104" cy="118" rx="5.5" ry="4.5" stroke="#FFB830" stroke-width="1.4" opacity=".62"/>
-        <circle cx="104" cy="118" r="3.2" fill="#FFB830" opacity="1"/>
+        <ellipse cx="104" cy="118" rx="5.5" ry="4.5" stroke="#FFB830" stroke-width="1.4" opacity=".65"/>
+        <circle cx="104" cy="118" r="3.5" fill="#FFB830" opacity="1"/>
         <path d="M76 205C68 220 70 230 80 228C91 226 97 214 90 206" stroke="#FFB830" stroke-width="3.5" stroke-linecap="round" opacity=".62"/>
       </svg>
     </div>
 
     <div class="s1-logo">UNJNI</div>
-    <div class="s1-sub">India's First Voice Task OS</div>
-
+    <div class="s1-tag">World's First Voice Task OS</div>
   </div>
 
   <div class="scroll-cue">
@@ -483,47 +613,57 @@ body::before{
   </div>
 </section>
 
-<!-- ═══ S2 — TERMINAL ═══ -->
+<!-- ═══ S2 TERMINAL ═══ -->
 <section class="s2">
-  <div class="s2-label" id="s2l">SPEAK ANYTHING · IT'S DONE</div>
+  <!-- Background geometry -->
+  <svg class="s2-geo" viewBox="0 0 800 800" fill="none">
+    <circle cx="400" cy="400" r="380" stroke="rgba(255,184,48,0.04)" stroke-width="1" stroke-dasharray="3 9"/>
+    <circle cx="400" cy="400" r="280" stroke="rgba(255,184,48,0.05)" stroke-width="0.5"/>
+    <circle cx="400" cy="400" r="180" stroke="rgba(255,184,48,0.06)" stroke-width="0.5" stroke-dasharray="2 6"/>
+    <line x1="20" y1="400" x2="780" y2="400" stroke="rgba(255,184,48,0.04)" stroke-width="0.5"/>
+    <line x1="400" y1="20" x2="400" y2="780" stroke="rgba(255,184,48,0.04)" stroke-width="0.5"/>
+    <line x1="131" y1="131" x2="669" y2="669" stroke="rgba(255,184,48,0.03)" stroke-width="0.5"/>
+    <line x1="669" y1="131" x2="131" y2="669" stroke="rgba(255,184,48,0.03)" stroke-width="0.5"/>
+  </svg>
+
+  <div class="s2-label" id="s2l">SPEAK ANYTHING · IT IS DONE</div>
 
   <div class="terminal" id="term">
+    <div class="t-glow"></div>
     <div class="t-top">
-      <div class="tdot"></div>
-      <div class="tdot"></div>
-      <div class="tdot"></div>
-      <div class="t-top-label">UNJNI · VOICE OS</div>
-      <div class="t-top-r">
-        <div class="pdot"></div>
-        ACTIVE
-      </div>
+      <div class="tdot"></div><div class="tdot"></div><div class="tdot"></div>
+      <div class="t-top-lbl">UNJNI · VOICE OS · ACTIVE</div>
+      <div class="t-top-r"><div class="pdot"></div>LISTENING</div>
     </div>
-
     <div class="t-body" id="tbody">
       <div class="tdots" id="tdots">
         <span></span><span></span><span></span>
       </div>
     </div>
-
     <div class="t-foot">
       <div class="micbtn">
         <svg viewBox="0 0 24 24" fill="none">
-          <rect x="9" y="2" width="6" height="12" rx="3" fill="#060606"/>
-          <path d="M5 10C5 14.42 8.13 18 12 18C15.87 18 19 14.42 19 10" stroke="#060606" stroke-width="2.2" stroke-linecap="round"/>
-          <line x1="12" y1="18" x2="12" y2="22" stroke="#060606" stroke-width="2.2" stroke-linecap="round"/>
+          <rect x="9" y="2" width="6" height="12" rx="3" fill="#04040a"/>
+          <path d="M5 10C5 14.42 8.13 18 12 18C15.87 18 19 14.42 19 10" stroke="#04040a" stroke-width="2.2" stroke-linecap="round"/>
+          <line x1="12" y1="18" x2="12" y2="22" stroke="#04040a" stroke-width="2.2" stroke-linecap="round"/>
         </svg>
       </div>
-      <div class="wbars" id="wbars">
-        <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-      </div>
+      <div class="wbars" id="wbars"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
       <div class="t-hint" id="thint">Listening...</div>
     </div>
   </div>
 </section>
 
-<!-- ═══ S3 — COUNTDOWN ═══ -->
+<!-- ═══ S3 COUNTDOWN ═══ -->
 <section class="s3">
-  <div class="s3-label" id="s3l">LAUNCHING IN</div>
+  <svg class="s3-geo" width="500" height="500" viewBox="0 0 500 500" fill="none">
+    <circle cx="250" cy="250" r="240" stroke="rgba(255,184,48,1)" stroke-width="0.5" stroke-dasharray="2 8"/>
+    <circle cx="250" cy="250" r="180" stroke="rgba(255,184,48,1)" stroke-width="0.5"/>
+    <circle cx="250" cy="250" r="120" stroke="rgba(255,184,48,1)" stroke-width="0.5" stroke-dasharray="3 6"/>
+    <polygon points="250,10 477,375 23,375" stroke="rgba(255,184,48,1)" stroke-width="0.5" fill="none"/>
+    <polygon points="250,490 23,125 477,125" stroke="rgba(255,184,48,1)" stroke-width="0.5" fill="none"/>
+  </svg>
+  <div class="s3-lbl" id="s3l">LAUNCHING IN</div>
   <div class="cd" id="cd">
     <div class="cd-u"><span class="cd-n" id="dd">00</span><span class="cd-l">Days</span></div>
     <div class="cd-u"><span class="cd-n" id="hh">00</span><span class="cd-l">Hours</span></div>
@@ -532,162 +672,110 @@ body::before{
   </div>
 </section>
 
-<!-- ═══ S4 — CLOSING ═══ -->
+<!-- ═══ S4 CLOSING ═══ -->
 <section class="s4">
-  <div class="s4-ghost" aria-hidden="true">INDIA</div>
+  <svg class="s4-mandala" viewBox="0 0 500 500" fill="none">
+    <circle cx="250" cy="250" r="240" stroke="white" stroke-width="0.5" stroke-dasharray="2 6"/>
+    <circle cx="250" cy="250" r="180" stroke="white" stroke-width="0.5"/>
+    <circle cx="250" cy="250" r="120" stroke="white" stroke-width="0.5" stroke-dasharray="1 4"/>
+    <circle cx="250" cy="250" r="60"  stroke="white" stroke-width="0.5"/>
+    <g stroke="white" stroke-width="0.4">
+      <line x1="10" y1="250" x2="490" y2="250"/>
+      <line x1="250" y1="10" x2="250" y2="490"/>
+      <line x1="80" y1="80" x2="420" y2="420"/>
+      <line x1="420" y1="80" x2="80" y2="420"/>
+      <line x1="10" y1="155" x2="490" y2="345"/>
+      <line x1="155" y1="10" x2="345" y2="490"/>
+      <line x1="10" y1="345" x2="490" y2="155"/>
+      <line x1="345" y1="10" x2="155" y2="490"/>
+    </g>
+    <circle cx="250" cy="250" r="6" fill="white"/>
+  </svg>
+
   <div class="s4-inner" id="s4i">
     <div class="s4-rule"></div>
     <div class="s4-made">Made in India</div>
-    <div class="s4-first">FIRST VOICE TASK<br/>EXECUTION OS</div>
-    <div class="s4-year">2026 · THE FUTURE NEEDS NO APPS</div>
+    <div class="s4-headline">FIRST VOICE TASK<br/>EXECUTION OS</div>
+    <div class="s4-sub">2026 · THE FUTURE NEEDS NO APPS</div>
     <div class="s4-rule"></div>
   </div>
 </section>
 
 <footer class="footer">
-  <div class="ft">UNJNI · V.01 · 2026</div>
-  <div class="ft">INDIA</div>
+  <div class="ft">UNJNI · V.01 · 2025</div>
+  <div class="ft">INDIA · 23.5937°N</div>
 </footer>
 
 <script>
-// ── Cursor ──────────────────────────────────────
-const cur=document.getElementById('cur');
-const curr=document.getElementById('curr');
+// Cursor
+const cur=document.getElementById('cur'),curr=document.getElementById('curr');
 let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove',e=>{
-  mx=e.clientX;my=e.clientY;
-  cur.style.left=mx+'px';cur.style.top=my+'px';
-});
-(function loop(){
-  rx+=(mx-rx)*.11;ry+=(my-ry)*.11;
-  curr.style.left=rx+'px';curr.style.top=ry+'px';
-  requestAnimationFrame(loop);
-})();
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
+(function loop(){rx+=(mx-rx)*.11;ry+=(my-ry)*.11;curr.style.left=rx+'px';curr.style.top=ry+'px';requestAnimationFrame(loop);})();
 
-// ── Scroll reveal ───────────────────────────────
-const reveals=[
-  {id:'s2l',delay:0},
-  {id:'term',delay:150},
-  {id:'s3l',delay:0},
-  {id:'cd',delay:150},
-  {id:'s4i',delay:0},
-];
-
+// Scroll reveal
 const obs=new IntersectionObserver(entries=>{
   entries.forEach(en=>{
     if(en.isIntersecting){
-      const delay=en.target.dataset.delay||0;
-      setTimeout(()=>en.target.classList.add('vis'),+delay);
+      setTimeout(()=>en.target.classList.add('vis'),+(en.target.dataset.d||0));
       obs.unobserve(en.target);
     }
   });
 },{threshold:.15});
+[{id:'s2l',d:0},{id:'term',d:150},{id:'s3l',d:0},{id:'cd',d:180},{id:'s4i',d:0}]
+.forEach(r=>{const el=document.getElementById(r.id);if(el){el.dataset.d=r.d;obs.observe(el);}});
 
-reveals.forEach(r=>{
-  const el=document.getElementById(r.id);
-  if(el){el.dataset.delay=r.delay;obs.observe(el);}
-});
-
-// ── Conversations ───────────────────────────────
+// Conversations
 const convos=[
-  {u:"Hey Unjni, get me the best pasta near me right now",
-   a:"Done. Trattoria, 12th Main. 4.8★. Arriving 8:45 PM."},
-  {u:"Recharge my phone. The usual plan.",
-   a:"Recharged. ₹299 · 28 days · 2GB daily. UPI confirmed."},
-  {u:"Send a calendar invite to Prachi — tomorrow 3pm, product review",
-   a:"Sent. Product Review · Tomorrow 3:00 PM. She's notified."},
-  {u:"Mujhe kal subah 7 baje airport jaana hai",
-   a:"Cab 6:15 AM. Buffer for traffic. Alarm 5:45 AM. Sleep well."},
-  {u:"Write a follow-up email to Sharma ji about the invoice",
-   a:"Draft ready. ₹45K due since Tuesday. Reply requested by Friday. Send?"},
-  {u:"Book a doctor for my mother's knee pain in Bangalore",
-   a:"Dr. Meera Iyer · Ortho · 4.9★ · Jayanagar · Tomorrow 11 AM."},
-  {u:"Order milk, eggs and bread — usual brands",
-   a:"Ordered. Arriving 18 mins. Amul · Nandini · Britannia. ₹284."},
-  {u:"Pay my electricity bill",
-   a:"BESCOM ₹1,840 paid. Receipt saved. Next due Nov 18."},
-  {u:"Create invoice for Gupta ji — web design — ₹35,000",
-   a:"Invoice #047 sent. PDF saved. Net 30. Done."},
-  {u:"Nearest petrol pump that's open right now",
-   a:"BPCL, 800m on your route. Open 24 hrs. Directions sent."},
+  {u:"Hey Unjni, get me the best pasta near me right now", a:"Done. Trattoria, 12th Main. 4.8★. Arriving 8:45 PM."},
+  {u:"Recharge my phone. The usual plan.", a:"Recharged. ₹299 · 28 days · 2GB daily. UPI confirmed."},
+  {u:"Send calendar invite to Prachi — tomorrow 3pm, product review", a:"Sent. Product Review · Tomorrow 3:00 PM."},
+  {u:"Mujhe kal subah 7 baje airport jaana hai", a:"Cab 6:15 AM. Alarm 5:45 AM. Sorted."},
+  {u:"Write a follow-up email to Sharma ji about the invoice", a:"Draft ready. ₹45K due since Tuesday. Send?"},
+  {u:"Book a doctor for my mother's knee pain in Bangalore", a:"Dr. Meera Iyer · Ortho · 4.9★ · Tomorrow 11 AM."},
+  {u:"Order milk, eggs and bread — usual brands", a:"Ordered. Arriving 18 mins. ₹284. Done."},
+  {u:"Pay my electricity bill", a:"BESCOM ₹1,840 paid. Next due Nov 18."},
+  {u:"Create invoice for Gupta ji — web design — ₹35,000", a:"Invoice #047 sent. PDF saved. Net 30."},
+  {u:"Nearest petrol pump open right now", a:"BPCL, 800m on your route. Open 24 hrs."},
 ];
 
 let ci=0;
-const tbody=document.getElementById('tbody');
-const tdots=document.getElementById('tdots');
-const wbars=document.getElementById('wbars');
-const thint=document.getElementById('thint');
-
+const tbody=document.getElementById('tbody'),tdots=document.getElementById('tdots');
+const wbars=document.getElementById('wbars'),thint=document.getElementById('thint');
 function clearMsgs(){tbody.querySelectorAll('.msg').forEach(e=>e.remove())}
 function wait(ms){return new Promise(r=>setTimeout(r,ms))}
 
 async function run(i){
-  const c=convos[i];
-  clearMsgs();
-
-  // Mic pulse — listening
-  wbars.classList.add('on');
-  thint.textContent='Listening...';
-  await wait(1000);
-  wbars.classList.remove('on');
-  thint.textContent='Processing...';
-
-  // User message
-  const msg=document.createElement('div');
-  msg.className='msg';
-  msg.innerHTML=`
-    <div class="msg-u">${c.u}</div>
-    <div class="msg-a" id="ma${i}">${c.a}</div>
-  `;
+  const c=convos[i];clearMsgs();
+  wbars.classList.add('on');thint.textContent='Listening...';
+  await wait(950);
+  wbars.classList.remove('on');thint.textContent='Processing...';
+  const msg=document.createElement('div');msg.className='msg';
+  msg.innerHTML=`<div class="msg-u">${c.u}</div><div class="msg-a" id="ma${i}">${c.a}</div>`;
   tbody.insertBefore(msg,tdots);
-  msg.style.opacity='0';msg.style.transform='translateY(8px)';
-  msg.style.transition='opacity .5s ease,transform .5s ease';
-  await wait(50);
-  msg.style.opacity='1';msg.style.transform='translateY(0)';
-
+  msg.style.cssText='opacity:0;transform:translateY(8px);transition:opacity .5s ease,transform .5s ease';
+  await wait(30);msg.style.opacity='1';msg.style.transform='translateY(0)';
   await wait(500);
-
-  // Typing
-  tdots.classList.add('on');
-  thint.textContent='Thinking...';
-  await wait(1600);
-  tdots.classList.remove('on');
-  thint.textContent='Listening...';
-
-  // AI reply appears
-  const aiEl=document.getElementById(`ma${i}`);
-  if(aiEl) aiEl.classList.add('vis');
-
-  await wait(4200);
-  ci=(ci+1)%convos.length;
-  run(ci);
+  tdots.classList.add('on');thint.textContent='Thinking...';
+  await wait(1500);tdots.classList.remove('on');thint.textContent='Listening...';
+  const ai=document.getElementById(`ma${i}`);if(ai)ai.classList.add('vis');
+  await wait(4000);
+  ci=(ci+1)%convos.length;run(ci);
 }
 
-// Start after terminal scrolls into view
 let started=false;
-const termObs=new IntersectionObserver(entries=>{
-  if(entries[0].isIntersecting&&!started){
-    started=true;
-    setTimeout(()=>run(0),600);
-    termObs.disconnect();
-  }
-},{threshold:.3});
-termObs.observe(document.getElementById('term'));
+new IntersectionObserver(entries=>{
+  if(entries[0].isIntersecting&&!started){started=true;setTimeout(()=>run(0),600);}
+},{threshold:.3}).observe(document.getElementById('term'));
 
-// ── Countdown ────────────────────────────────────
-const launch=new Date();
-launch.setDate(launch.getDate()+90);
-launch.setHours(0,0,0,0);
+// Countdown
+const launch=new Date();launch.setDate(launch.getDate()+90);launch.setHours(0,0,0,0);
 function pad(n){return String(n).padStart(2,'0')}
 function tick(){
-  const diff=launch-new Date();
-  if(diff<=0)return;
-  const d=Math.floor(diff/86400000);
-  const h=Math.floor((diff%86400000)/3600000);
-  const m=Math.floor((diff%3600000)/60000);
-  const s=Math.floor((diff%60000)/1000);
-  const se=document.getElementById('ss');
-  const pv=se.textContent,nx=pad(s);
+  const diff=launch-new Date();if(diff<=0)return;
+  const d=Math.floor(diff/86400000),h=Math.floor((diff%86400000)/3600000);
+  const m=Math.floor((diff%3600000)/60000),s=Math.floor((diff%60000)/1000);
+  const se=document.getElementById('ss'),pv=se.textContent,nx=pad(s);
   document.getElementById('dd').textContent=pad(d);
   document.getElementById('hh').textContent=pad(h);
   document.getElementById('mm').textContent=pad(m);
@@ -696,10 +784,16 @@ function tick(){
 }
 tick();setInterval(tick,1000);
 
-// ── Waitlist ──────────────────────────────────────
+// Waitlist
 const n=2847+Math.floor(Math.random()*220);
-document.getElementById('wlabel').textContent=
-  n.toLocaleString('en-IN')+' WAITING';
+document.getElementById('wlabel').textContent=n.toLocaleString('en-IN')+' WAITING';
+
+// Live clock in HUD
+setInterval(()=>{
+  const now=new Date();
+  document.querySelector('.hud-tl').textContent=
+    `UNJNI · ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
+},1000);
 </script>
 </body>
 </html>
