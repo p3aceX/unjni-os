@@ -117,7 +117,8 @@ body::before{
 }
 .ear-wave-line{
   height:2px;border-radius:2px;
-  background:linear-gradient(to right, transparent, rgba(240,237,230,0.5), transparent);
+  background:linear-gradient(to right, transparent, rgba(255,184,48,0.7), transparent);
+  box-shadow:0 0 6px rgba(255,184,48,.4);
   animation:waveSweep 2.2s ease-in-out infinite;
   transform-origin:left center;
 }
@@ -393,20 +394,20 @@ body::before{
   to{opacity:1;transform:translateY(0)}
 }
 @keyframes listenRing1{
-  0%,100%{border-color:rgba(240,237,230,0);transform:scale(.92)}
-  50%{border-color:rgba(240,237,230,.08);transform:scale(1)}
+  0%,100%{border-color:rgba(255,184,48,0);transform:scale(.92);box-shadow:0 0 0px rgba(255,184,48,0)}
+  50%{border-color:rgba(255,184,48,.25);transform:scale(1);box-shadow:0 0 18px rgba(255,184,48,.08)}
 }
 @keyframes listenRing2{
-  0%,100%{border-color:rgba(240,237,230,0);transform:scale(.9)}
-  50%{border-color:rgba(240,237,230,.12);transform:scale(1)}
+  0%,100%{border-color:rgba(255,184,48,0);transform:scale(.9);box-shadow:0 0 0px rgba(255,184,48,0)}
+  50%{border-color:rgba(255,184,48,.35);transform:scale(1);box-shadow:0 0 22px rgba(255,184,48,.12)}
 }
 @keyframes listenRing3{
-  0%,100%{border-color:rgba(240,237,230,0);transform:scale(.88)}
-  50%{border-color:rgba(240,237,230,.18);transform:scale(1)}
+  0%,100%{border-color:rgba(255,184,48,0);transform:scale(.88);box-shadow:0 0 0px rgba(255,184,48,0)}
+  50%{border-color:rgba(255,184,48,.5);transform:scale(1);box-shadow:0 0 28px rgba(255,184,48,.18)}
 }
 @keyframes earBreath{
-  0%,100%{opacity:.85;transform:scale(.97)}
-  50%{opacity:1;transform:scale(1)}
+  0%,100%{opacity:.7;filter:drop-shadow(0 0 0px rgba(255,184,48,0))}
+  50%{opacity:1;filter:drop-shadow(0 0 10px rgba(255,184,48,.55))}
 }
 @keyframes waveSweep{
   0%{opacity:0;transform:scaleX(0.2)}
@@ -461,13 +462,13 @@ body::before{
 
       <!-- Ear mark -->
       <svg class="ear-svg" viewBox="0 0 200 240" fill="none">
-        <path d="M72 28C92 20 128 20 148 42C168 64 174 96 171 124C167 152 154 172 140 186C128 198 112 206 102 210C93 214 83 213 76 205C68 196 68 182 74 168C80 154 88 146 90 134C93 120 88 104 80 96C71 87 60 86 54 72C48 58 52 38 72 33Z" stroke="white" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" opacity=".94"/>
-        <path d="M82 36C100 30 130 34 146 56C160 76 163 104 159 128C154 150 142 165 130 175C120 183 108 188 100 189" stroke="white" stroke-width="2.8" stroke-linecap="round" opacity=".38"/>
-        <ellipse cx="104" cy="118" rx="18" ry="14" stroke="white" stroke-width="1.6" opacity=".22"/>
-        <ellipse cx="104" cy="118" rx="11" ry="8.5" stroke="white" stroke-width="1.4" opacity=".35"/>
-        <ellipse cx="104" cy="118" rx="5.5" ry="4.5" stroke="white" stroke-width="1.4" opacity=".52"/>
-        <circle cx="104" cy="118" r="3.2" fill="white" opacity=".92"/>
-        <path d="M76 205C68 220 70 230 80 228C91 226 97 214 90 206" stroke="white" stroke-width="3.5" stroke-linecap="round" opacity=".58"/>
+        <path d="M72 28C92 20 128 20 148 42C168 64 174 96 171 124C167 152 154 172 140 186C128 198 112 206 102 210C93 214 83 213 76 205C68 196 68 182 74 168C80 154 88 146 90 134C93 120 88 104 80 96C71 87 60 86 54 72C48 58 52 38 72 33Z" stroke="#FFB830" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" opacity=".95"/>
+        <path d="M82 36C100 30 130 34 146 56C160 76 163 104 159 128C154 150 142 165 130 175C120 183 108 188 100 189" stroke="#FFB830" stroke-width="2.8" stroke-linecap="round" opacity=".48"/>
+        <ellipse cx="104" cy="118" rx="18" ry="14" stroke="#FFB830" stroke-width="1.6" opacity=".28"/>
+        <ellipse cx="104" cy="118" rx="11" ry="8.5" stroke="#FFB830" stroke-width="1.4" opacity=".42"/>
+        <ellipse cx="104" cy="118" rx="5.5" ry="4.5" stroke="#FFB830" stroke-width="1.4" opacity=".62"/>
+        <circle cx="104" cy="118" r="3.2" fill="#FFB830" opacity="1"/>
+        <path d="M76 205C68 220 70 230 80 228C91 226 97 214 90 206" stroke="#FFB830" stroke-width="3.5" stroke-linecap="round" opacity=".62"/>
       </svg>
     </div>
 
